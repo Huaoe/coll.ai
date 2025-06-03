@@ -6,11 +6,11 @@ Bloomberg data
 Actions c'est plus simple
 
 obligation : Bloomberg n'a pas forcement l'information 
-  -> la banque qui doit livré ce titre : doit fournir la term sheet
+  -> la banque qui doit livrer ce titre : doit fournir la term sheet
 
-fonctions Bloomberg : WEI DES ID DVD
+ex fonctions Bloomberg : WEI DES ID DVD
 
-le probleme est surrtout sur les abs finance : agregation de dette 
+le probleme est surtout sur les abs finance : agregation de dette 
 on verifie le secteur 
 
 --
@@ -20,12 +20,14 @@ titre est il eligible
 
 tous les criteres sont ils validés
 
-quelles sont les force du titre
+quelles sont les forces du titre
 
 
 ---
 
-on va partir sur une categories bien specifiques RMBS ABS
+pour la soutenance, on va partir sur une categorie bien specifiques RMBS ABS
 
-l'idée c'est de faire du machine learning sur un dataset construit par nos soins et repondre a la question le titre est il elligible
-peut-etre que le bloc 5 sera l'utilisation d'un LLM custom pour creer une carte de visite
+l'idée c'est de faire du machine learning sur un dataset construit par nos soins et repondre a la question : le titre est il elligible ?
+peut-etre que le bloc 5 sera l'utilisation d'un LLM custom pour creer une carte de visite du collateral
+
+
