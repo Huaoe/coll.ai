@@ -1,0 +1,112 @@
+ Expression de besoins – Projet Agent IA d’analyse d’éligibilité du collatéral
+
+(Prêt‑emprunt de titres / securities lending)
+1. Vision & objectifs
+
+    Finalité métier : automatiser, fiabiliser et tracer la décision « éligible / non éligible » d’un actif proposé en collatéral, à partir des critères de l'entreprise et des données temps réel Bloomberg.
+    Rôle de l’agent IA : passer du simple LLM “statique” à un agent spécialisé capable de percevoir la donnée, raisonner sur la matrice, décider et agir (mise à jour, reporting, alertes) en toute autonomie relative. 
+
+2. Périmètre fonctionnel
+
+    Perception
+
+        Ingestion via API Bloomberg (B‑Pipe / Terminal API) : notations, échéances, juridiction, devise…
+        Appels internes (bases collatéral, référentiel limites, matrices PDF).
+
+    Traitement cognitif
+
+        Utilisation d’un LLM spécialisé (fine‑tuning ou RAG) comme moteur de traitement.
+        Règles expertes + raisonnement symbolique (critères stricts) combinés à l’analyse probabiliste (cas limites).
+
+    Planification & décision
+
+        Module de planificateur / système d’utilité pour arbitrer : accepter, refuser, escalader. 
+
+    Action
+
+        Écriture dans un journal d’audit (base SQL / SharePoint).
+        Génération de rapports (Dashboard Power BI, e‑mail, Teams).
+        Webhook vers système de booking pour pré‑remplir le collatéral.
+
+    Interfaces utilisateur
+
+        Agent conversationnel (chat Copilot) pour questions ad‑hoc.
+        Dashboard “éligibilité live” reprenant statut, justifications, KPI.
+
+3. Architecture cible (niveau logique)
+
+    Senseurs / Interfaces d’entrée : API Bloomberg, API internes, uploads manuels (Excel).
+    Middleware : pipeline Python + ETL léger qui nettoie, normalise et timestamp les données.
+    Système de mémoire
+
+        Mémoire court terme : contexte de la transaction en cours.
+        Mémoire long terme : règles de l'entreprise, historiques de décisions, exceptions.
+        Mémoire épisodique : cas testés + résultat (pour audit & entraînement). 
+
+    Cœur cognitif :
+
+        LLM GPT personnalisé + module d’inférence symbolique.
+        Composant d’orchestration pour assurer la cohérence des tâches et la reprise sur erreur. 
+
+    Actuateurs / Interfaces de sortie : APIs internes, mails auto, dashboards, notifications Teams.
+
+4. Typologie d’agents impliqués
+
+    Agent d’analyse de données : extrait, vérifie la cohérence des champs Bloomberg.
+    Agent de décision & conseil : applique la matrice, formule la justification, calcule le haircut optimal.
+    Agent d’automatisation : publie le verdict dans le système middle‑office, trace les exceptions.
+    Scenario évolutif multi‑agents : coordination d’un agent d’information (veille rating) et d’un agent d’apprentissage (amélioration continue). 
+
+5. Exigences techniques
+
+    API & connecteurs : REST/JSON, OAuth 2.0, limit‑rate handling Bloomberg.
+    BD & stockage : Data Lake + tables temps réel pour logs, historisation.
+    Scalabilité : pics de 1 000 tests/heure, latence < 1 s décisionnelle.
+    Sécurité : chiffrement TLS, rôle RBAC, logs immuables, isolation réseau.
+    Déploiement : conteneurs Kubernetes on‑prem ou cloud privé (politique d'entreprise).
+    Performance : disponibilité 99,9 %, monitoring Prometheus + Grafana.
+
+6. Exigences data
+
+    Qualité : fraîcheur < 5 minutes, complétude 100 % des attributs critiques.
+    Traçabilité : chaque champ source → décision → sortie.
+    Gouvernance : catalogage, conformité RGPD & AI Act (finance = high‑risk). 
+
+7. Critères de succès (PEAS)
+
+    Performance : exactitude ≥ 99 % vs contrôles humains.
+    Environnement : connectivité stable Bloomberg + internes.
+    Actuateurs : intégrations back‑office et reporting sans erreur.
+    Senseurs : couverture totale des flux marché et référentiels. 
+
+8. Gouvernance & conformité
+
+    Oversight humain : revue quotidienne des refus, alertes automatiques.
+    Lignes éthiques : transparence des limites, explication de chaque refus.
+    Plan de remédiation : rollback vers process manuel si dérive / incidents.
+    Contrôles réglementaires : audit interne, conformité AI Act, exigences ACPR.
+
+9. Défis & risques anticipés
+
+    Hallucinations / faux positifs : mitigés par RAG + règles deterministes.
+    Dépendance technique Bloomberg : prévoir cache et fallback provider.
+    Sécurité prompt / jailbreaking : filtres et test red‑team.
+    Montée en charge : stress‑tests multi‑agents et optimisation coût GPU.
+
+10. Roadmap indicative
+
+    Cadrage détaillé (S0‑S2) – validation scope, risques, Indicateurs ROI.
+    MVP “analyse simple” (S3‑S6) – API + règles de base, justification textuelle.
+    Phase pilote (S7‑S10) – intégration middle‑office, audit interne.
+    Généralisation & multi‑agents (T+6 mois) – ajout apprentissage continu, extension ESG.
+
+11. Glossaire essentiel (extraits du support)
+
+    Agent IA : entité logicielle autonome percevant, raisonnant, agissant.
+    LLM : Large Language Model, cœur cognitif génératif.
+    Middleware / intergiciel : couche de traduction & régulation entre sources et LLM.
+    PEAS : Performance, Environnement, Actuateurs, Senseurs – cadre d’analyse.
+    BDI : Belief‑Desire‑Intention, architecture à états mentaux.
+    RAG : Retrieval‑Augmented Generation (LLM + base documentaire).
+    MARL : Multi‑Agent Reinforcement Learning (apprentissage collectif).
+    AI Act : règlement européen sur l’IA, catégorie “high‑risk” pour la finance.
